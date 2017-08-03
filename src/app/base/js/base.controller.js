@@ -1,13 +1,23 @@
 angular.module('orderCloud')
     .controller('BaseCtrl', BaseController);
 
-function BaseController(CurrentUser, $state, catalogid) {
+function BaseController(CurrentUser, $state, ocNavItems) {
     var vm = this;
     vm.currentUser = CurrentUser;
+    vm.navItemsLeft = ocNavItems.Filter(ocNavItems.TopNavLeft());
+    vm.navItemsRight = ocNavItems.Filter(ocNavItems.TopNavRight());
+
+    vm.isActive = function(activeWhen) {
+        var result = false;
+        angular.forEach(activeWhen, function(stateName) {
+            if ($state.includes(stateName)) result = true;
+        });
+        return result;
+    };
 
     vm.addContainerClass = function() {
         var result = false;
-        var containedStates = ['products', 'catalogs', 'buyers', 'home', 'orders', 'sellerUsers', 'sellerUserGroups', 'sellerUserGroup*', 'sellerAddresses', 'permissions'];
+        var containedStates = ['products', 'sellerMessageSenders', 'catalogs', 'buyers', 'home', 'orders', 'sellerUsers', 'sellerUserGroups', 'sellerUserGroup*', 'sellerAddresses', 'permissions'];
         _.each(containedStates, function (state) {
             if (result === true) return;
             var test = state.split('*');

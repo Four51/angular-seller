@@ -17,6 +17,7 @@ function OrdersController($state, $ocMedia, OrderCloudSDK, ocParameters, ocOrder
     vm.orderStatuses = [
         {Value: 'Open', Name: 'Open'},
         {Value: 'AwaitingApproval', Name: 'Awaiting Approval'},
+        {Value: 'Canceled', Name: 'Canceled'},
         {Value: 'Completed', Name: 'Completed'},
         {Value: 'Declined', Name: 'Declined'}
     ];

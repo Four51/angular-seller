@@ -2,14 +2,15 @@
 // it is simply required to maintain an "Upload" function. In this module Get and Delete were created as possible capabilities but not implemented within the file upload directive
 
 angular.module('orderCloud')
-    .factory('ocFilesService', OrderCloudFilesService)
+    .factory('ocFiles', OrderCloudFilesService)
 ;
 
-function OrderCloudFilesService($q, awsaccesskeyid, awssecretaccesskey, awsregion, awsbucket) {
+function OrderCloudFilesService($q, $log, awsaccesskeyid, awssecretaccesskey, awsregion, awsbucket) {
     var service = {
         Get: _get,
         Upload: _upload,
-        Delete: _delete
+        Delete: _delete,
+        Enabled: _enabled
     };
 
     AWS.config.region = awsregion;
@@ -27,12 +28,13 @@ function OrderCloudFilesService($q, awsaccesskeyid, awssecretaccesskey, awsregio
         return randomstring;
     }
 
-    function _get(fileKey) {
+    function _get(fileKey, folder) {
         var deferred = $q.defer();
         var s3 = new AWS.S3();
-        var params = {Bucket: awsbucket, Key: fileKey};
+        var key = folder ? (fileKey.indexOf('/') > -1 ? fileKey : folder + '/' + fileKey) : fileKey;
+        var params = {Bucket: awsbucket, Key: key};
         s3.getObject(params, function (err, data) {
-            err ? console.log(err) : console.log(data);
+            if (err) $log.error(err);
             deferred.resolve(data);
         });
         return deferred.promise;
@@ -44,21 +46,31 @@ function OrderCloudFilesService($q, awsaccesskeyid, awssecretaccesskey, awsregio
         var key = (folder ? folder + '/' : '') + randomString();
         var params = {Bucket: awsbucket, Key: key, ContentType: file.type, Body: file};
         s3.upload(params, function (err, data) {
-            err ? console.log(err) : console.log(data);
+            if (err) $log.error(err);
             deferred.resolve(data);
         });
         return deferred.promise;
     }
 
-    function _delete(fileKey) {
+    function _delete(fileKey, folder) {
         var deferred = $q.defer();
         var s3 = new AWS.S3();
-        var params = {Bucket: awsbucket, Key: fileKey};
+        var key = folder ? (fileKey.indexOf('/') > -1 ? fileKey : folder + '/' + fileKey) : fileKey;
+        var params = {Bucket: awsbucket, Key: key};
         s3.deleteObject(params, function (err, data) {
-            err ? console.log(err) : console.log(data);
+            if (err) $log.error(err);
             deferred.resolve(data);
         });
         return deferred.promise;
+    }
+
+    function _enabled() {
+        return (
+            angular.isDefined(awsaccesskeyid) && awsaccesskeyid !== 'XXXXXXXXXXXXXXXXXXXX'
+            && angular.isDefined(awssecretaccesskey) && awssecretaccesskey !== 'XXXXXXXXXXXXXXXXX+XXXXXXXXXXXXXXXXXXXXXX'
+            && angular.isDefined(awsregion) && awsregion !== 'XX-XXXX-X'
+            && angular.isDefined(awsbucket) && awsbucket !== 'XXXX'
+        );
     }
 
     return service;

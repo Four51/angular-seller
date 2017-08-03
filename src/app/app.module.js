@@ -11,11 +11,14 @@ angular.module('orderCloud', [
         'ui.bootstrap',
         'toastr',
         'angular-busy',
+        'slick',
         'jcs-autoValidate',
         'treeControl',
         'hl.sticky',
         'angularPayments',
         'ordercloud-angular-sdk',
-        'LocalForageModule'
+        'LocalForageModule',
+        'dndLists',
+        'textAngular'
     ]
 );
