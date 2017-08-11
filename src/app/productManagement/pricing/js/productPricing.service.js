@@ -50,7 +50,7 @@ function ocProductPricingService($q, $uibModal, OrderCloudSDK, ocConfirm) {
                                 assignments.Items = [].concat(assignments.Items, result.Items);
                                 assignments.Meta = result.Meta;
                             });
-                            assignments.buyerlist = _.uniq(_.map(assignments.Items, 'BuyerID'));
+                            assignments.buyerlist = _.uniqByuniq(_.map(assignments.Items, 'BuyerID'));
 
                             deferred.resolve(assignments);
                         });

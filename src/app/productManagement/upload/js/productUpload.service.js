@@ -191,7 +191,7 @@ function ProductUploadService($q, ocUtility, OrderCloudSDK, catalogid, UploadSer
             var categoryAssignments = [];
 
             _.each(products, function(product) {
-                var category = _.findWhere(categories, {ID: product.CategoryID});
+                var category = _.find(categories, {ID: product.CategoryID});
                 if (category) {
                     var assignment = {
                         CategoryID: category.ID,
@@ -398,7 +398,7 @@ function ProductUploadService($q, ocUtility, OrderCloudSDK, catalogid, UploadSer
             })
         });
         _.each(groupedAttrs, function(group, index) {
-            var product = _.findWhere(prodCollection, {unique_id: index});
+            var product = _.find(prodCollection, {unique_id: index});
             if(product) {
                 product.attributes = group;
                 product.CategoryID = findCategoryID(product.attributes);

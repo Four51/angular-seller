@@ -46,7 +46,7 @@ function OrderCloudOrdersService($q, $filter, OrderCloudSDK) {
             });
 
         function gatherBuyerCompanies(orders) {
-            var buyerIDs = _.uniq(_.pluck(orders.Items, 'FromCompanyID'));
+            var buyerIDs = _.uniq(_.map(orders.Items, 'FromCompanyID'));
             var options = {
                 page: 1,
                 pageSize: 100,
@@ -56,7 +56,7 @@ function OrderCloudOrdersService($q, $filter, OrderCloudSDK) {
                 .then(function(buyerData) {
                     var queue = [];
                     _.each(orders.Items, function(order) {
-                        order.FromCompany = _.findWhere(buyerData.Items, {ID: order.FromCompanyID});
+                        order.FromCompany = _.find(buyerData.Items, {ID: order.FromCompanyID});
                         queue.push(getUserGroups(order))
                     });
                     return $q.all(queue)
@@ -87,7 +87,7 @@ function OrderCloudOrdersService($q, $filter, OrderCloudSDK) {
 
         function getAddress(userGroupID) {
             var addressQueue = [];
-            _.each(_.pluck(buyers.Items, 'ID'), function(buyerID) {
+            _.each(_.map(buyers.Items, 'ID'), function(buyerID) {
                 var parameters = {
                     filters: {
                         CompanyName: userGroupID
@@ -97,10 +97,10 @@ function OrderCloudOrdersService($q, $filter, OrderCloudSDK) {
             });
             return $q.all(addressQueue)
                 .then(function(results) {
-                    var addresses = [].concat.apply([], _.pluck(results, 'Items'));
+                    var addresses = [].concat.apply([], _.map(results, 'Items'));
                     delete parameters.FromUserGroupID
                     angular.extend(parameters.filters, {
-                        ShippingAddressID: _.pluck(addresses, 'ID').join('|')
+                        ShippingAddressID: _.map(addresses, 'ID').join('|')
                     })
                     return OrderCloudSDK.Orders.List('Incoming', parameters)
                         .then(function(orders) {

@@ -145,7 +145,7 @@ function UserUploadService($q, OrderCloudSDK, UploadService, toastr, $exceptionH
             _.each(users, function(user) {
                 var assignedLocationIDs = user.xp.Locations;
                 _.each(assignedLocationIDs, function(id) {
-                    var matchedID = _.findWhere(groups.UserGroups, {ID: id});
+                    var matchedID = _.find(groups.UserGroups, {ID: id});
                     if(matchedID) {
                         var assignment = {
                             UserID: user.ID,
@@ -229,7 +229,7 @@ function UserUploadService($q, OrderCloudSDK, UploadService, toastr, $exceptionH
             var addressAssignments = [];
 
             _.each(groups, function(group) {
-                var matchingID = _.findWhere(addresses, {CompanyName: group.ID});
+                var matchingID = _.find(addresses, {CompanyName: group.ID});
                 if(matchingID) {
                     var assignment = {
                         IsShipping: true,

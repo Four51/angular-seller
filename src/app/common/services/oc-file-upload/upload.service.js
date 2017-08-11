@@ -21,7 +21,7 @@ function UploadService($q, $resource, devapiurl) {
                             var uniqueUserObjs = _.groupBy(users, 'id');
                             _.each(uniqueUserObjs, function(userArr){
                                 if(userArr.length > 0) {
-                                    userArr[0].store_location_id = _.pluck(userArr, 'store_location_id');
+                                    userArr[0].store_location_id = _.map(userArr, 'store_location_id');
                                     userQueue.push(userArr[0]);
                                 }
                             });
