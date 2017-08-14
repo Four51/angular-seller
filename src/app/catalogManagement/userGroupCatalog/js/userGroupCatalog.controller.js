@@ -2,7 +2,8 @@ angular.module('orderCloud')
     .controller('UserGroupCatalogCtrl', UserGroupCatalogController)
 ;
 
-function UserGroupCatalogController($q, $exceptionHandler, $stateParams, toastr, ocCatalog, ocCatalogTree, ocCatalogCategories, SelectedUserGroup, SelectedCatalog, BuyerCategoryAssignments, UserGroupCategoryAssignments, CategoryList, CatalogAssignment, Tree) {
+function UserGroupCatalogController($exceptionHandler, $stateParams, toastr, 
+    ocCatalogCategories, SelectedUserGroup, SelectedCatalog, CatalogAssignment, Tree) {
     var vm = this;
     vm.viewAllCategories = CatalogAssignment.ViewAllCategories;
     vm.viewAllProducts = CatalogAssignment.ViewAllProducts;

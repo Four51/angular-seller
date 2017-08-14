@@ -42,7 +42,7 @@
                         'fa-folder-open': collapsed
                     }">
                 </i>
-                <p><a ui-sref="categories.category.products({catalogid:buyerCatalog.selectedCatalog.ID, categoryid:node.ID})" uib-tooltip="View Category" tooltip-placement="right" tooltip-popup-delay="1200">{{node.Name}}</a></p>
+                <p><a ui-sref="categories.category.products({catalogid:userGroupCatalog.selectedCatalog.ID, categoryid:node.ID})" uib-tooltip="View Category" tooltip-placement="right" tooltip-popup-delay="1200">{{node.Name}}</a></p>
                 <i class="fa fa-circle" aria-hidden="true" ng-class="{'active':node.Active}"></i>
                 <fieldset class="checkbox">
                     <label class="control-label">
