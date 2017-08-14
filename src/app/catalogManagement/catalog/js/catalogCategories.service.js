@@ -94,11 +94,37 @@ function OrderCloudCatalogCategoriesSerivce($q, OrderCloudSDK) {
             userGroupID: userGroupID,
             visible: true
         };
-        return OrderCloudSDK.Categories.SaveAssignment(catalogID, assignment);
+        return OrderCloudSDK.Categories.SaveAssignment(catalogID, assignment)
+            .then(function(){
+                var catalog = {
+                    "CatalogID": "sotasubs",
+                    "BuyerID": "sotasubs",
+                    "ViewAllCategories": true,
+                    "ViewAllProducts": false
+                }
+                return OrderCloudSDK.Catalogs.SaveAssignment(catalog)
+                    .then(function(){
+                        catalog.ViewAllCategories = false;
+                        return OrderCloudSDK.Catalogs.SaveAssignment(catalog);
+                    });
+            });
     }
 
     function _deleteAssignment(catalogID, categoryID, buyerID, userGroupID) {
-        return OrderCloudSDK.Categories.DeleteAssignment(catalogID, categoryID, buyerID, {userGroupID: userGroupID});
+        var catalog = {
+            "CatalogID": "sotasubs",
+            "BuyerID": "sotasubs",
+            "ViewAllCategories": true,
+            "ViewAllProducts": false
+        };
+        return OrderCloudSDK.Categories.DeleteAssignment(catalogID, categoryID, buyerID, {userGroupID: userGroupID})
+            .then(function(){
+                return OrderCloudSDK.Catalogs.SaveAssignment(catalog)
+                    .then(function(){
+                        catalog.ViewAllCategories = false;
+                        return OrderCloudSDK.Catalogs.SaveAssignment(catalog);
+                    });
+            });
     }
 
     return service;
